@@ -1,0 +1,42 @@
+
+#outer-container {
+    display: flex;
+    width: 100vw;              /* 100% of viewport width */
+    height: 100vh;             /* 100% of viewport height */
+    align-items: center;       /* conter y-axis */
+    justify-content: center;   /* center x-axis */
+    /*background-color:  hsl(258,100%,80%); */
+    background-image: linear-gradient(hsl(258,100%,80%),hsl(258,100%,60%), hsl(258,100%,80%));
+}
+
+button:active {
+    background-color: yellow
+}
+
+.drum-row {
+    margin-bottom: 3px;
+}
+
+.drum-pad {
+    background-color: indigo; 
+    color: white;
+    font-size: 2em;
+    font-weight: bold;
+    border: 2px solid white;
+    width: 120px;
+    height: 120px;
+}
+
+#display {
+    background-color: lightgrey;
+    font-size: 2em;
+    padding-top: 0.2em;
+    border: 2px solid white;
+    height: 2em;
+    width:368px;
+}
+
+#drum-machine {
+    background-color: rgb(70,70,70);
+    padding: 1em 2em;
+}

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>FCC: Calculator</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+        crossorigin="anonymous">
+    </script>
+    <!-- Load React. -->
+    <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
+    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+    <!--
+    <script src="https://unpkg.com/react@16/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js" crossorigin></script>
+    -->
+
+    <!-- For JSX -- Don't use this in production: -->
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+</head>
+
+<body>
+
+<!-- Container for our JSX stuff-->
+<div id="app"></div>
+
+<!-- Some JSX stuff -->
+<script type="text/babel">
+
+class CalcKey extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+        text: this.props.text
+    };
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  operatorIsDisplayed() {
+    let currentText = $('#display').html();
+    return (currentText==='X') || (currentText==='/') 
+           || (currentText==='+') || (currentText==='-');    
+  }
+
+  topDisplayContainsEqual() {
+    let topText = $('#displayTop').html();
+    return (topText.indexOf("=")!=-1);
+  }
+
+  fitToDisplay(input, maxChars) {
+      let str = input + '';
+      if (str.length < maxChars) {return str; }
+      if (str.indexOf('.')==-1) {
+          return input;
+      } else {
+          let n = maxChars - 1 - str.indexOf('.');
+          if (n < 0) return input;
+          return parseFloat(str).toFixed(n);
+      }
+  }
+
+  calculateAnswer() {
+      let str = $('#displayTop').html();
+      str = str.replace(/=/g,'');
+      str = str.replace(/X/g,'*');
+      str = eval(str);
+      return this.fitToDisplay(str,16);
+  }
+
+  displayNumber(txt) {
+
+    let currentText = $('#display').html();
+
+    // If top display contains an equal sign, clear the top display
+    if(this.topDisplayContainsEqual()) {
+        $('#displayTop').html('');
+        currentText = '0';
+    }
+
+    // display contains an operator, set it equal to zero
+    if (this.operatorIsDisplayed()) {
+        $('#displayTop').html($('#displayTop').html() + ' ');
+        currentText='0';
+    }
+
+    // don't let the number get too big...
+    if (currentText.length >= 14) return;
+
+    // append number to the text and display
+    let newText = currentText + txt;
+    newText = newText.replace(/^0(\d)/,'$1'); // remove leading zeroes
+    $('#display').html(newText);
+  
+  }
+
+  displayClear() {
+    $('#display').html('0');
+    $('#displayTop').html('');
+  }
+
+  displayDecimal() {
+    let str=$('#display').html();
+    if (str.indexOf('.')==-1) {
+        this.displayNumber('.');
+    }
+  }
+
+  displayOperator(txt) {
+   
+     //if the top display contains an equal sign, clear the top display
+    if(this.topDisplayContainsEqual()) {
+        $('#displayTop').html('');
+    } 
+    
+    // if the current display is an operator then remove the last character in the top display
+    // and clear the bottom display
+    if (this.operatorIsDisplayed()) {
+        let topText = $('#displayTop').html();
+        $('#displayTop').html(topText.substring(0, topText.length-1));
+        $('#display').html('');
+    }
+
+    // add the operator to the displays
+    $('#displayTop').html($('#displayTop').html() + $('#display').html() + ' ' + txt);
+    $('#display').html(txt);
+
+    // If operator is the equal sign, compute the answer and display
+    if (txt==='=') {
+        let answer=this.calculateAnswer();
+        $('#displayTop').html($('#displayTop').html() + ' ' + answer);
+        $('#display').html(answer);
+    }
+  }
+
+  handleClick(event) {
+    let buttonId = event.target.id;  
+    switch (buttonId) {
+        case 'decimal':
+            this.displayDecimal();
+            break;
+        case 'clear':
+            this.displayClear();
+            break;
+        case 'multiply':
+        case 'divide':
+        case 'add':
+        case 'subtract':
+        case 'equals':
+            this.displayOperator(this.state.text);
+            break;
+        default:
+            this.displayNumber(this.state.text);
+            break;
+    }
+  }
+
+  render() {
+    return (
+        <button id={this.props.id} className="calc-key" onClick={this.handleClick}>
+            {this.props.text}
+        </button>
+    );
+  }
+};
+
+CalcKey.defaultProps = {
+    text: 'TBD',
+    id: 'tbd'
+};
+
+class MyApp extends React.Component {
+    constructor(props) {
+        super(props);
+    };
+    render() {
+        return (
+        <div id="calculator">
+            <div className="calc-row">
+                <div id="displayTop" className="container text-right"></div>
+            </div>
+            <div className="calc-row">
+                <div id="display" className="container text-right">0
+                </div>
+            </div>
+            <div className="calc-row">
+                <CalcKey text="AC" id="clear" />
+                <CalcKey text="/" id="divide" />
+            </div>
+            <div className="calc-row">
+                <CalcKey text="7" id="seven" />
+                <CalcKey text="8" id="eight" />
+                <CalcKey text="9" id="nine" />
+                <CalcKey text="X" id="multiply" />
+            </div>
+            <div className="calc-row">
+                <CalcKey text="4" id="four" />
+                <CalcKey text="5" id="five" />
+                <CalcKey text="6" id="six" />
+                <CalcKey text="-" id="subtract" />
+            </div>
+            <div className="calc-row">
+                <CalcKey text="1" id="one" />
+                <CalcKey text="2" id="two" />
+                <CalcKey text="3" id="three" />
+                <CalcKey text="+" id="add" />
+            </div>
+            <div className="calc-row">
+                <CalcKey text="0" id="zero" />
+                <CalcKey text="." id="decimal" />
+                <CalcKey text="=" id="equals" />
+            </div>
+        </div>
+        );
+    }
+};
+
+ReactDOM.render(
+    <MyApp />,
+    document.getElementById('app')
+);
+
+</script>
+
+<!-- Uncomment out the script below to run the FreeCodeCamp test scripts-->
+
+<script src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"></script>
+
+</body>
+</html>

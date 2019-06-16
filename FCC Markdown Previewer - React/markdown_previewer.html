@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FCC: Markdown Previewer</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.6.2/marked.js"></script>
+
+    <!-- Load React. -->
+    <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
+    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+    <!--
+    <script src="https://unpkg.com/react@16/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js" crossorigin></script>
+    -->
+
+    <!-- For JSX -- Don't use this in production: -->
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+
+    <script src="previewMarkdown.js"></script>
+
+</head>
+<body>
+
+
+<div id="title-container" class="container-fluid text-center">
+    <h1 id="title">Markdown Previewer</h1>
+    <p id="description">Preview your Markdown Document</p>
+</div>
+
+<!-- Container for our JSX stuff-->
+<div id="markdown-previewer-container" class="container-fluid"></div>
+
+
+<!-- Some JSX stuff -->
+<script type="text/babel">
+
+//
+// MarkdownPreviewer() - based on freeCodeCamp.org Controlled Input example:
+// https://learn.freecodecamp.org/front-end-libraries/react/create-a-controlled-input
+//
+//
+class MarkdownPreviewer extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+        input: getDefaultText()
+        };
+        this.handleChange = this.handleChange.bind(this);
+    }
+    handleChange(event) {
+        this.setState({input: event.target.value});
+    }
+    render() {
+        return (
+        <div>
+            <div class="row">
+                <div className="col-xs-6"><strong>Markdown</strong></div>
+                <div className="col-xs-6"><strong>HTML</strong></div>
+            </div>
+            <div class="row">
+                <textarea id="editor" className="col-xs-6" value={this.state.input} onChange={this.handleChange}># Test</textarea>
+                <div id="preview" className="col-xs-6" dangerouslySetInnerHTML={{__html: marked(this.state.input,{breaks: true})}}></div>
+            </div>
+        </div>
+        );
+    }
+};
+
+ReactDOM.render(
+    <MarkdownPreviewer
+     />,
+    document.getElementById('markdown-previewer-container')
+);
+
+</script>
+
+<!-- Uncomment out the script below to run the FreeCodeCamp test scripts-->
+
+<script src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"></script>
+
+
+
+</body>
+</html>

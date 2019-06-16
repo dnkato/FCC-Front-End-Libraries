@@ -1,0 +1,22 @@
+
+.row {
+    padding: 0.2em 1em;
+}
+
+#title-container {
+    background-image: linear-gradient(blue,indigo); 
+    color: white;
+    margin: 1em;
+    padding: 1em;
+}
+
+#editor, #preview {
+    height: 40em;
+    overflow-y: scroll;
+}
+
+#preview {
+    border: 1px solid gray;
+}
+
+

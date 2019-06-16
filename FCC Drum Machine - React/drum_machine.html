@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FCC: Drum Machine</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="styles.css">
+    
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+        crossorigin="anonymous">
+    </script>
+    
+    <!-- Load React. -->
+    <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
+    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+    <!--
+    <script src="https://unpkg.com/react@16/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js" crossorigin></script>
+    -->
+
+    <!-- For JSX -- Don't use this in production: -->
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+
+</head>
+<body>
+
+<!-- Container for our JSX stuff-->
+<div id="app" ></div>
+
+<!-- Some JSX stuff -->
+<script type="text/babel">
+
+class DrumPad extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+        keyCode: this.props.letter.charCodeAt(0)
+    };
+    this.handleKeyPress = this.handleKeyPress.bind(this);
+  }
+  componentDidMount() {
+      document.addEventListener("keydown", this.handleKeyPress);
+  }
+  componentWillUnmount() {
+      document.removeEventListener("keydown", this.handleKeyPress);
+  }
+  handleKeyPress(event) {
+      if (event.keyCode == this.state.keyCode) {
+        $("#btn-"+this.props.letter).focus();
+        $("#btn-"+this.props.letter).click();
+      }
+  }
+  render() {
+    return (
+        <button id={"btn-"+ this.props.letter} className="drum-pad" onClick={this.props.handleClick} value={this.props.letter}>
+            <audio id={this.props.letter} className="clip" src={this.props.audioSrc} preload="auto">{this.props.audioName}</audio>
+            {this.props.letter}
+        </button>
+    );
+  }
+};
+
+DrumPad.defaultProps = {
+    letter: 'P',
+    audioName: 'Key P Sound',
+    audioSrc: 'https://s3.amazonaws.com/freecodecamp/drums/Heater-1.mp3'
+};
+
+class MyApp extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            display: ' '
+        };
+        this.handleClick = this.handleClick.bind(this);
+    };
+
+    handleClick(event) {
+        let keyLetter = event.target.value;
+        document.getElementById(keyLetter).play();
+        this.setState({display: $('#'+keyLetter).html()});
+   }
+
+    render() {
+        return (
+        <div id="drum-machine" className="text-center">
+            <div className="drum-row">
+                <DrumPad letter="Q" handleClick={this.handleClick} audioName="Chord-1" audioSrc="https://s3.amazonaws.com/freecodecamp/drums/Chord_1.mp3"/>
+                <DrumPad letter="W" handleClick={this.handleClick} audioName="Chord-2" audioSrc="https://s3.amazonaws.com/freecodecamp/drums/Chord_2.mp3"/>
+                <DrumPad letter="E" handleClick={this.handleClick} audioName="Chord-3" audioSrc="https://s3.amazonaws.com/freecodecamp/drums/Chord_3.mp3"/>
+            </div>
+            <div className="drum-row">
+                <DrumPad letter="A" handleClick={this.handleClick} audioName="Heater-1" audioSrc="https://s3.amazonaws.com/freecodecamp/drums/Heater-1.mp3"/>
+                <DrumPad letter="S" handleClick={this.handleClick} audioName="Heater-2" audioSrc="https://s3.amazonaws.com/freecodecamp/drums/Heater-2.mp3"/>
+                <DrumPad letter="D" handleClick={this.handleClick} audioName="Heater-3" audioSrc="https://s3.amazonaws.com/freecodecamp/drums/Heater-3.mp3"/>
+            </div>
+            <div className="drum-row">
+                <DrumPad letter="Z" handleClick={this.handleClick} audioName="Kick" audioSrc="https://s3.amazonaws.com/freecodecamp/drums/punchy_kick_1.mp3"/>
+                <DrumPad letter="X" handleClick={this.handleClick} audioName="Side-Stick" audioSrc="https://s3.amazonaws.com/freecodecamp/drums/side_stick_1.mp3"/>
+                <DrumPad letter="C" handleClick={this.handleClick} audioName="Heater-6" audioSrc="https://s3.amazonaws.com/freecodecamp/drums/Heater-6.mp3"/>
+            </div>
+            <div className="drum-row">
+                <div id="display" className="container">{this.state.display}</div>
+            </div>
+        </div>
+        );
+    }
+};
+
+ReactDOM.render(
+    <MyApp />,
+    document.getElementById('app')
+);
+
+</script>
+
+<!-- Uncomment out the script below to run the FreeCodeCamp test scripts-->
+
+<script src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"></script>
+
+
+</body>
+</html>

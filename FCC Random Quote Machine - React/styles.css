@@ -1,0 +1,16 @@
+@import url('https://fonts.googleapis.com/css?family=Merriweather');
+
+
+#app {
+    font-family: Merriweather; 
+    background-color: hsl(258,100%,90%);
+    display: flex;
+    width: 100vw;              /* 100% of viewport width */
+    height: 100vh;             /* 100% of viewport height */
+    align-items: center;       /* conter y-axis */
+    justify-content: center;   /* center x-axis */
+}
+
+.btn {
+    margin: 0.5em;
+}

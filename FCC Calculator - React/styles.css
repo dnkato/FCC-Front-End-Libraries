@@ -1,0 +1,68 @@
+
+#app {
+    display: flex;
+    width: 100vw;              /* 100% of viewport width */
+    height: 100vh;             /* 100% of viewport height */
+    align-items: center;       /* conter y-axis */
+    justify-content: center;   /* center x-axis */
+    /*background-image: linear-gradient(rgb(192, 162, 221), rgb(144, 73, 196));*/
+    background-image: linear-gradient(rgb(192, 162, 221), lightgrey, rgb(192, 162, 221));
+}
+
+
+.calc-key {
+    background-color: lightskyblue; 
+    font-size: 2em;
+    width: 100px;
+    height: 100px;
+}
+
+#zero {
+    width: 200px;
+}
+
+#clear {
+    width:300px;
+}
+
+#divide, #multiply, #add, #subtract, #equals {
+    background-color: lightseagreen;
+}
+
+#clear {
+    background-color: rgb(139, 128, 240);
+}
+
+#display {
+    background-color: lightgrey;
+    font-size: 3em;
+    font-weight: bold;
+    padding-top: 0.5em;
+    width:400px;
+    border-top:none;
+}
+
+#displayTop {
+    background-color: lightgrey;
+    color: blue;
+    font-size: 1em;
+    font-weight: bold;
+    height: 2em;
+    width:400px;
+    border-bottom: none;
+    overflow-x: auto;
+}
+
+#calculator {
+    border: 5px solid rgb(150,150,150);
+}
+
+.calc-key:hover {
+    font-weight: bold;
+}
+
+.calc-key:active, #divide:active, #multiply:active, 
+#add:active, #subtract:active, #equals:active, #clear:active {
+    background-color: lightgrey;
+} 
+

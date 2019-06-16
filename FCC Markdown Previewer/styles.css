@@ -1,0 +1,26 @@
+
+.row {
+    padding: 0.2em 1em;
+}
+
+.btn {
+    padding: 0.2em;
+}
+
+#title-container {
+    background-color: rgba(0,0,0,.50);
+    color: white;
+    margin: 1em;
+    padding: 1em;
+}
+
+#editor, #preview {
+    height: 40em;
+    overflow: auto;
+}
+
+#preview {
+    border: 1px solid gray;
+}
+
+

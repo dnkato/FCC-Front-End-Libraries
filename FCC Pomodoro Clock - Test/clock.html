@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>FCC: Pomodoro Clock</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" integrity="sha384-XdYbMnZ/QjLh6iI4ogqCTaIjrFk87ip+ekIjefZch0Y+PvJ8CDYtEs1ipDmPorQ+" crossorigin="anonymous">
+
+    <!--
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+        crossorigin="anonymous">
+    </script>
+    -->
+    <!-- Load React. -->
+    <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
+    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+    <!--
+    <script src="https://unpkg.com/react@16/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js" crossorigin></script>
+    -->
+
+    <!-- For JSX -- Don't use this in production: -->
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+</head>
+
+<body>
+
+<!-- Container for our JSX stuff-->
+<div id="app"></div>
+
+<!-- Some JSX stuff -->
+<script type="text/babel">
+
+const SESSION = 'Session';
+const BREAK = 'Break';
+const DEFAULT_SESSION = 25; //25
+const DEFAULT_BREAK = 5;    //5
+const MIN_LENGTH = 1;
+const MAX_LENGTH = 60;
+const INTERVAL_MS = 1000; // 1000, make shorter for testing
+
+class MyApp extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            breakLength: DEFAULT_BREAK,
+            sessionLength: DEFAULT_SESSION,
+            timerLabel: SESSION,
+            secondsLeft: DEFAULT_SESSION * 60,
+            isRunning: false,
+            myInterval: null 
+        }
+        this.handleReset = this.handleReset.bind(this);
+        this.handleStartStop = this.handleStartStop.bind(this);
+        this.incrementBreak = this.incrementBreak.bind(this);
+        this.decrementBreak = this.decrementBreak.bind(this);
+        this.incrementSession = this.incrementSession.bind(this);
+        this.decrementSession = this.decrementSession.bind(this);
+        this.decrementTimer = this.decrementTimer.bind(this);
+    };
+
+    // Displays the time left in mm:ss format
+    displayTimeInMinutesSeconds(secondsLeft) {
+        let minutes = Math.trunc(secondsLeft / 60);
+        let seconds = secondsLeft % 60;
+        return ((minutes < 10) ? '0': '') + minutes + ':' +
+               ((seconds < 10) ? '0': '') + seconds;
+    }
+
+    incrementBreak() {
+        alert(event.target.id);
+        let newLength = Math.min(MAX_LENGTH,this.state.breakLength + 1);
+        this.setState({breakLength: newLength});
+        if ((this.state.timerLabel == BREAK) && (!this.state.isRunning)) this.setState({secondsLeft: 60 * newLength});
+    }
+    decrementBreak() {
+        let newLength = Math.max(MIN_LENGTH,this.state.breakLength - 1);
+        this.setState({breakLength: newLength});
+        if ((this.state.timerLabel == BREAK) && (!this.state.isRunning)) this.setState({secondsLeft: 60 * newLength});
+    }
+    incrementSession() {
+        alert(event.target.id);
+        let newLength =  Math.min(MAX_LENGTH, this.state.sessionLength + 1);
+        this.setState({sessionLength: newLength});
+        if ((this.state.timerLabel == SESSION) && (!this.state.isRunning)) this.setState({secondsLeft: 60 * newLength});
+    }
+    decrementSession() {
+        let newLength = Math.max(MIN_LENGTH,this.state.sessionLength - 1)
+        this.setState({sessionLength: newLength});
+        if ((this.state.timerLabel == SESSION) && (!this.state.isRunning)) this.setState({secondsLeft: 60 * newLength});
+    }
+
+    handleReset() {
+        // set the break/session lengths back to their defaults
+        this.setState({breakLength: DEFAULT_BREAK});
+        this.setState({sessionLength: DEFAULT_SESSION});
+        // stop the timer if it is running
+        if (this.state.isRunning) {
+            clearInterval(this.state.myInterval);
+            this.setState({isRunning: false});
+        }
+        // set the timer to display the session default value
+        this.setState({timerLabel: SESSION});
+        this.setState({secondsLeft: DEFAULT_SESSION * 60});
+        //pause and rewind audio
+        document.getElementById("beep").pause();
+        document.getElementById("beep").currentTime=0;
+    } // handleReset()
+
+    decrementTimer() {
+        // If the timer has reached zero, beep then change the timer type 
+        if (this.state.secondsLeft == 0) {
+            document.getElementById("beep").play();
+            if (this.state.timerLabel == SESSION) {
+                this.setState({timerLabel: BREAK});
+                this.setState({secondsLeft: this.state.breakLength * 60});
+            } else {
+                this.setState({timerLabel: SESSION});
+                this.setState({secondsLeft: this.state.sessionLength * 60});
+            }
+        } else {
+            // otherwise, just decrement timer by one second
+            this.setState({secondsLeft: this.state.secondsLeft - 1});
+        }
+    }
+
+    handleStartStop() {
+        if (!this.state.isRunning) {
+            //currently not running, so start the timer
+            let myInterval = setInterval(this.decrementTimer, INTERVAL_MS);
+            this.setState({myInterval: myInterval});
+        } else {
+            //currently running, so stop the timer
+            clearInterval(this.state.myInterval);
+        }
+        //toggle the state of the timer
+        this.setState({isRunning: !this.state.isRunning});
+    }
+
+    render() {
+        return (
+        <div id="pomodoro-clock">
+            <h1>Pomodoro Clock</h1>
+            <div className="length-setup-row">
+                <div className="length-setup">
+                    <h3 id="break-label">Break Length</h3>
+                    <button id="break-decrement" onClick={this.decrementBreak}><i className="fa fa-arrow-down"></i></button>
+                    <span id="break-length">{this.state.breakLength}</span>
+                    <button id="break-increment" onClick={this.incrementBreak}><i className="fa fa-arrow-up"></i></button> 
+                </div>
+                <div className="length-setup">
+                    <h3 id="session-label">Session Length</h3>
+                    <button id="session-decrement" onClick={this.decrementSession}><i className="fa fa-arrow-down"></i></button>
+                    <span id="session-length">{this.state.sessionLength}</span>
+                    <button id="session-increment" onClick={this.incrementSession}><i className="fa fa-arrow-up"></i></button>
+                </div>
+            </div>
+            <div className="timer-display">
+                <h1 id="timer-label">{this.state.timerLabel}</h1>
+                <h1 id="time-left">{this.displayTimeInMinutesSeconds(this.state.secondsLeft)}</h1>
+                <h2 className="timer-controls">
+                    <button id="start_stop" onClick={this.handleStartStop}><i className="fa fa-play"></i><i className="fa fa-pause"></i></button>
+                    <button id="reset" onClick={this.handleReset}><i className="fa fa-refresh"></i></button>
+                </h2>
+            </div>
+            <audio id="beep" class="clip" src="https://drive.google.com/uc?export=open&id=18JB9Edx0vWWqzq5S3hhH_SGQuA-yLRPj" preload="auto"></audio>
+        </div>
+        );
+    }
+};
+
+ReactDOM.render(
+    <MyApp />,
+    document.getElementById('app')
+);
+
+</script>
+
+<!-- Uncomment out the script below to run the FreeCodeCamp test scripts-->
+
+<script src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"></script>
+
+</body>
+</html>

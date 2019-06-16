@@ -1,0 +1,29 @@
+
+* {
+    background-color:  hsl(258,100%,80%);
+}
+
+button:active {
+    background-color: yellow
+} 
+
+.row {
+    padding: 0em;
+    margin: 0;
+}
+
+.drum-pad {
+    padding: 1em;
+    background-color: indigo; 
+    color: white;
+    font-size: 2em;
+    font-weight: bold;
+}
+
+#display {
+    background-color: lightgrey;
+    font-size: 2em;
+    height: 2em;
+    padding-top: 0.2em;
+    border: 2px solid white;
+}

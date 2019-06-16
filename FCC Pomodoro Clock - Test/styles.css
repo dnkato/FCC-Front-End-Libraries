@@ -1,0 +1,36 @@
+
+#app {
+    display: flex;
+    width: 100vw;              /* 100% of viewport width */
+    height: 100vh;             /* 100% of viewport height */
+    align-items: center;       /* conter y-axis */
+    justify-content: center;   /* center x-axis */
+    text-align: center;
+    background-color: rgb(6, 112, 107);
+    color: whitesmoke;
+}
+
+
+button {
+    background-color: rgb(6, 112, 107);
+    border: none;
+}
+
+.length-setup-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.length-setup {
+    padding: 1em;
+}
+
+.timer-display {
+    border: 5px solid darkslategray;
+    border-radius: 30px;
+}
+
+.timer-controls {
+    margin-bottom: 1em;
+}
