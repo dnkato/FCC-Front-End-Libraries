@@ -2,12 +2,6 @@
 <html>
 <head>
     <title>React Examples</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
-        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-        crossorigin="anonymous">
-    </script>
     <!-- Load React. -->
     <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
     <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
@@ -19,9 +13,6 @@
 
     <!-- For JSX -- Don't use this in production: -->
     <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
-
-    <script src="scripts.js"></script>
-
 </head>
 <body>
 
@@ -32,7 +23,11 @@
 <!-- Some JSX stuff -->
 <script type="text/babel">
 
-// Controlled Input Example from the course
+// Controlled Input Example from the freeCodeCamp react course:
+// https://learn.freecodecamp.org/front-end-libraries/react/create-a-controlled-input
+// This example shows how you can move the mutable state from form control inputs
+// such as a text input element into a React component's state.
+//
 class ControlledInput extends React.Component {
   constructor(props) {
     super(props);
@@ -56,6 +51,10 @@ class ControlledInput extends React.Component {
 };
 
 // Add Event Listenner Example
+// https://learn.freecodecamp.org/front-end-libraries/react/add-event-listeners
+//
+// listens for the keydown event. When the enter key is pressed, displays a message.
+
 class ListennerComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -90,6 +89,12 @@ class ListennerComponent extends React.Component {
   }
 };
 
+// Using Array.map() to Dynamically Render Elements example from the class:
+// https://learn.freecodecamp.org/front-end-libraries/react/use-array-map-to-dynamically-render-elements
+//
+// Type text into the input and click "submit"
+// submitted text is added to an array and the array is mapped to a list
+// 
 class DisplayMessages extends React.Component {
   constructor(props) {
     super(props);
@@ -127,23 +132,11 @@ class DisplayMessages extends React.Component {
 };
 
 
-// The main app
+// The main app: uncomment out the component you want to render
 class MyApp extends React.Component {
-    render() {
-/*
-        return (
-        <div>
-            <ListennerComponent />
-        </div>
-        );
-*/
-        return (
-            <div>
-                <ControlledInput />
-            </div>
-        );
-
-    }
+    //render() { return ( <ControlledInput />); }
+    //render() { return ( <ListennerComponent />); }
+    render() { return ( <DisplayMessages />); }
 };
 
 ReactDOM.render(
@@ -152,12 +145,6 @@ ReactDOM.render(
 );
 
 </script>
-
-<!-- Uncomment out the script below to run the FreeCodeCamp test scripts-->
-<!--
-<script src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"></script>
--->
-
 
 </body>
 </html>
