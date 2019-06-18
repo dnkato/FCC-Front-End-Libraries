@@ -4,12 +4,6 @@
     <title>FCC: Drum Machine</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
     <link rel="stylesheet" href="styles.css">
-    
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
-        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-        crossorigin="anonymous">
-    </script>
-    
     <!-- Load React. -->
     <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
     <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
@@ -47,8 +41,8 @@ class DrumPad extends React.Component {
   }
   handleKeyPress(event) {
       if (event.keyCode == this.state.keyCode) {
-        $("#btn-"+this.props.letter).focus();
-        $("#btn-"+this.props.letter).click();
+        document.getElementById("btn-"+this.props.letter).focus();
+        document.getElementById("btn-"+this.props.letter).click();
       }
   }
   render() {
@@ -79,7 +73,7 @@ class MyApp extends React.Component {
     handleClick(event) {
         let keyLetter = event.target.value;
         document.getElementById(keyLetter).play();
-        this.setState({display: $('#'+keyLetter).html()});
+        this.setState({display: document.getElementById(keyLetter).innerHTML});
    }
 
     render() {
