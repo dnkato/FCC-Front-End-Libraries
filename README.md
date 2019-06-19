@@ -1,4 +1,4 @@
-# FCC-FEL
+# FCC-Front-End-Libraries
 
 This repo contains projects I completed for the freeCodeCamp Front End Libraries Certification.
 
