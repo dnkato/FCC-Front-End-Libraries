@@ -11,6 +11,10 @@ button:active {
     background-color: yellow
 } 
 
+.drum-row {
+    width: 360px;
+}
+
 .drum-pad {
     background-color: indigo; 
     color: white;
